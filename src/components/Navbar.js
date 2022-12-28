@@ -24,7 +24,7 @@ export default function Example({searchTerm, setSearchTerm, accessToken, setAcce
     <Disclosure as="nav" className="bg-gray-800 ">
       {({ open }) => (
         <>
-          <div className="mx-auto ml-5 px-2 sm:px-6 lg:px-8 sticky top-0 z-50">
+          <div className="mx-auto ml-5 px-2 sm:px-6 lg:px-8 sticky top-0 z-[100]">
             <div className="relative flex h-18 items-center ">
               <div className=" items-center ld:left-10 sm:left-6 md:left-8">
                 <img

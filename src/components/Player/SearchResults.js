@@ -20,19 +20,21 @@ function SearchResults({
   isPlaying,
   setIsPlaying,
   setSearchAudioErr,
+  selected,
+  setDuration
 }) {
   // console.log(fetchTracks);
   return (
     <div className="justify-center items-center overflow-auto flex flex-col m-auto w-10/12 z-0">
       
-      {searchTerm!== "" && <div className="text-white flex items-center text-3xl font-bold mt-5 mb-8">
-        Search Results for " {searchTerm} " 
-      </div>} {/* needs fix */}
+      <div className="text-white flex items-center text-3xl font-bold mt-5 mb-8">
+        Search Results for " {searchTerm? searchTerm : selected} " 
+      </div>
 
       <div className="grid ld:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 overflow-auto h-1/2">
         {fetchTracks.map((track, i) => {
           // console.log(track)
-          return (
+          return (track.preview_url && 
             <Card
               className="mx-3 overflow-auto my-3 bg-slate-700 hover:opacity-70 hover:scale-105 cursor-pointer text-white rounded-3xl"
               onClick={() => {
@@ -43,6 +45,7 @@ function SearchResults({
                   ? setAudioSrc(track.preview_url)
                   : setSearchAudioErr(true)
                 setIsPlaying(!isPlaying)
+                setDuration(track.duration_ms)
               }}
             >
               <CardHeader color="blue" className="relative h-56">

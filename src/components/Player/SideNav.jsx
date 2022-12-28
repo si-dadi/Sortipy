@@ -35,8 +35,8 @@ export default function SideNav({ navigator, setNavigator, setSearchTerm }) {
             className={` ${
               menu?.margin && "mt-5"
             } group flex items-center text-sm  gap-3.5 font-medium p-2 hover:bg-gray-800 hover:text-yellow-300 rounded-md`}
-            onClick={(e) => {
-              setNavigator(e.target.innerText);
+            onClick={() => {
+              setNavigator(menu.name);
               setSearchTerm("")
               // console.log(navigator);
             }}

@@ -11,58 +11,33 @@ import {
 import { BsFillPlayFill, BsPauseFill } from "react-icons/bs";
 import VolumeControl from "./VolumeControl";
 
-const MusicPlayer = ({ songName, singerName, songImage, audioSrc, isPlaying, setIsPlaying, searchAudioErr }) => {
-  // const [isPlaying, setIsPlaying] = useState(false);
+const MusicPlayer = ({
+  songName,
+  singerName,
+  songImage,
+  audioSrc,
+  isPlaying,
+  setIsPlaying,
+  searchAudioErr,
+  duration,
+}) => {
   const [isFavourite, setIsFavourite] = useState(false);
-  const [duration, serDuration] = useState(0); // total song duration
+  // const [duration, serDuration] = useState(0); // total song duration
   const [currentTime, setCurrentTime] = useState(0); // current time: TODO: change to time left in the future
   const audioPlayer = useRef(); //audio ref
   const audioProgress = useRef(); //audio progress
   const animationRef = useRef();
   const [Volume, setVolume] = useState(40);
-  // load song when play button clicked
 
-  // load song when song is changed and reset on page refresh
-  // useEffect(() => {
-  // 	if (isPlaying) {
-  // 		audioPlayer.current.play();
-  // 		animationRef.current = requestAnimationFrame(whilePlaying);
-  // 	} else {
-  // 		audioPlayer.current.pause();
-  // 		cancelAnimationFrame(animationRef.current);
-  // 	}
-  // }, [isPlaying, song]);
-
-  // // player progress
-  // useEffect(() => {
-  // 	const seconds = Math.floor(audioPlayer.current.duration);
-  // 	serDuration(seconds);
-  // }, [
-  // 	audioPlayer?.current?.loadedmetadata,
-  // 	audioPlayer?.current?.readyState,
-  // ]);
-
-  const calcTime = (seconds) => {
-    const min = Math.floor(seconds / 60);
-    // < 10 -> 09 or 11,12,13,...
+  const calcTime = (msec) => {
+    const min = Math.floor(msec / 60000);
     const reutnMin = min < 10 ? `0${min}` : `${min}`;
-
-    const sec = Math.floor(seconds % 60);
+    const sec = Math.floor((msec % 60000) / 1000).toFixed(0);
     const reutnSec = sec < 10 ? `0${sec}` : `${sec}`;
-
     return `${reutnMin} : ${reutnSec}`;
   };
 
   const changeProgress = () => {};
-
-  // const changeProgressVolume =(e)=>{
-  // setVolume(e.target.value)
-  // console.log(Volume)
-  // if (Volume > 70) return <ImVolumeHigh />;
-  // else if (Volume > 40) return <ImVolumeMedium />;
-  // else if (Volume > 5) return <ImVolumeLow />;
-  // else return <ImVolumeMute2 />;
-  // }
 
   const whilePlaying = () => {
     audioProgress.current.value = audioPlayer.current.currentTime;
@@ -74,16 +49,32 @@ const MusicPlayer = ({ songName, singerName, songImage, audioSrc, isPlaying, set
     // console.log(audioProgress.current.value);
     audioProgress.current.style.setProperty(
       "--player-played",
-      `${(audioProgress.current.value / duration) * 100}%`
+      `${(audioProgress.current.value / 30) * 100}%`
     );
     setCurrentTime(audioProgress.current.value);
   };
 
+  useEffect(() => {
+    if (audioPlayer) {
+      audioPlayer.current.volume = Volume / 100;
+    }
+
+    // if(isPlaying){
+    //     setInterval(() => {
+    //         const _duration = Math.floor(audioPlayer?.current?.duration);
+    //         const _elapsed = Math.floor(audioPlayer?.current?.currentTime);
+
+    //         setDuration(_duration);
+    //         setElapsed(_elapsed);
+    //     }, 100);
+    // }
+  }, [Volume, isPlaying]);
+
   return (
-    <div className="absolute left-1/2 -translate-x-1/2 bottom-6 w-full bg-slate-500 text-primary rounded-3xl text-white z-50">
+    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-11/12 bg-slate-500 text-primary rounded-3xl text-white z-50 opacity-70 duration-1000 hover:opacity-100">
       <div className="flex flex-row">
         {/* Song Details */}
-        <div className="left-0 w-1/3 px-5 mx-5 flex flex-row items-center text-white">
+        <div className="left-0 w-1/3 px-5 mx-5 md:mx-3 sm:mx-1 flex flex-row items-center text-white">
           <div>
             <img
               src={songImage}
@@ -97,7 +88,7 @@ const MusicPlayer = ({ songName, singerName, songImage, audioSrc, isPlaying, set
             <div className="lg:text-xl md:text-sm sm:text-xs text-white font-bold">
               {songName}
             </div>
-            <div className="lg:text-md md:text-sm sm:text-xs text-white/70">
+            <div className="lg:text-md md:text-sm sm:text-xs text-white/70 ">
               {singerName}
             </div>
           </div>
@@ -105,7 +96,12 @@ const MusicPlayer = ({ songName, singerName, songImage, audioSrc, isPlaying, set
 
         {/* Music Controls */}
         <div className="w-full flex flex-grow flex-col">
-          <audio src={audioSrc} preload="metadata" ref={audioPlayer}/>
+          <audio
+            src={audioSrc}
+            preload="metadata"
+            ref={audioPlayer}
+            onVolumeChange={Volume / 100}
+          />
           {/* Player attributes - top */}
           <div className="playerCotrols flex items-center px-6 py-3 justify-center">
             {/* player controls */}
@@ -132,10 +128,28 @@ const MusicPlayer = ({ songName, singerName, songImage, audioSrc, isPlaying, set
               </motion.div>
               <motion.div
                 whileTap={{ scale: 0.8 }}
-                className="playPause mr-4 last:mr-0  bg-primaryTextWhite rounded-full p-2 cursor-pointer"
+                className="playPause mr-4 last:mr-0 bg-primaryTextWhite rounded-full p-2 cursor-pointer"
+                // needs fix
+                onKeyDown={(e) => {
+                  if (e.key === "E") {
+                    setIsPlaying(!isPlaying);
+                    !isPlaying
+                      ? audioPlayer.current.play()
+                      : audioPlayer.current.pause();
+                    songName !== ""
+                      ? (document.title = `Sortify | Playing ${songName}`)
+                      : (document.title = "Sortify");
+                  }
+                }}
                 onClick={() => {
-                  !isPlaying?(audioPlayer.current.play()):(audioPlayer.current.pause())
+                  !isPlaying
+                    ? audioPlayer.current.play()
+                    : audioPlayer.current.pause();
+                  songName !== ""
+                    ? (document.title = `Sortify | Playing ${songName}`)
+                    : (document.title = "Sortify");
                   setIsPlaying(!isPlaying);
+                  whilePlaying();
                 }}
               >
                 <i>
@@ -191,28 +205,30 @@ const MusicPlayer = ({ songName, singerName, songImage, audioSrc, isPlaying, set
               {calcTime(currentTime)}
             </div>
             <input
-              className="tracklist_range w-[80%] relative h-[5px] mx-4  outline-none rounded-[5px] mr-3 bg-primary appearance-none"
+              className="tracklist_range w-[80%] sm:w-[50%] relative h-[5px] mx-4  outline-none rounded-[5px] mr-3 bg-primary appearance-none"
               type="range"
               ref={audioProgress}
               onChange={changeProgress}
             />
-            <div className="currentTime text-primaryTextWhite text-[14px] font-semibold">
-              {calcTime(currentTime)}
+            <div
+              className="duration text-primaryTextWhite text-[14px] font-semibold"
+              // onMouseOver={
+              //   <div>
+              //     This is the original song length, the preview you're listening
+              //     to is 30secs long
+              //   </div>
+              // }
+            >
+              {duration && !isNaN(duration)
+                ? `00 : 30 (${calcTime(duration)})`
+                : "00 : 00"}
             </div>
-            {/* <div className="duration text-primaryTextWhite text-[14px] font-semibold">
-						{duration && !isNaN(duration)
-							? calcTime(duration)
-							: "00:00"}
-					</div> */}
           </div>
         </div>
 
-        {/* <VolumeIcon value={Volume}/> */}
-        {/* <VolumeControl value={Volume} changeProgressVolume={changeProgressVolume}/> */}
         <VolumeControl
-          value={Volume}
+          Volume={Volume}
           onChange={(e) => setVolume(e.target.value)}
-          setVolume={setVolume}
         />
       </div>
     </div>

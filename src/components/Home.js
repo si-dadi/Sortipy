@@ -1,7 +1,7 @@
 import Navbar from "./Navbar";
 import SideNav from "./Player/SideNav";
 import { MusicPlayer } from "./Player/MusicPlayer";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Error from "./services/Error";
 import HomePage from "./services/pages/HomePage";
 import LikedSongs from "./services/pages/LikedSongs";
@@ -54,21 +54,22 @@ export default function Home() {
   const [audioSrc, setAudioSrc] = useState("")
   const [isPlaying, setIsPlaying] = useState(false);
   const [searchAudioErr, setSearchAudioErr] = useState(false)
+  const [duration, setDuration] = useState(0); // total song duration
 
-
+  console.log(isPlaying)
 
   return (
-    <div className="overflow-auto text-white z-0 w-screen min-h-screen h-screen bg-gradient-to-tr from-slate-800 via-black/95 to-slate-800">
+    <div className="overflow-auto text-white z-0 w-screen min-h-screen h-screen min-w-full bg-gradient-to-tr from-slate-800 via-black/95 to-slate-800">
       <Navbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} accessToken={accessToken} setAccessToken={setAccessToken} fetchAlbums={fetchAlbums} setAlbums={setAlbums} fetchTracks={fetchTracks} setTracks={setTracks}/>
       <SideNav
         navigator={navigator}
         setNavigator={setNavigator}
         setSearchTerm={setSearchTerm}
       />
-      <MusicPlayer songName={songName} singerName={singerName} songImage={songImage} audioSrc={audioSrc} isPlaying={isPlaying} setIsPlaying={setIsPlaying} searchAudioErr={searchAudioErr}/>
+      <MusicPlayer songName={songName} singerName={singerName} songImage={songImage} audioSrc={audioSrc} isPlaying={isPlaying} setIsPlaying={setIsPlaying} searchAudioErr={searchAudioErr} duration={duration}/>
       {searchTerm === "" ? (
         navigator === "Home" ? (
-          <HomePage selected={selected} setSelected={setSelected} genres={genres} accessToken={accessToken} setAccessToken={setAccessToken} fetchTracks={fetchTracks} setTracks={setTracks} setSongName={setSongName} setSingerName={setSingerName} setSongImage={setSongImage}/>
+          <HomePage selected={selected} setSelected={setSelected} genres={genres} accessToken={accessToken} setAccessToken={setAccessToken} fetchTracks={fetchTracks} setTracks={setTracks} setSongName={setSongName} setSingerName={setSingerName} setSongImage={setSongImage} setAudioSrc={setAudioSrc} isPlaying={isPlaying} setIsPlaying={setIsPlaying} setSearchAudioErr={setSearchAudioErr} setDuration={setDuration}/>
         ) : navigator === "Liked Songs" ? (
           <LikedSongs />
         ) : navigator === "Your Playlists" ? (
@@ -76,12 +77,12 @@ export default function Home() {
         ) : navigator === "Recommendations" ? (
           <Recommendations accessToken={accessToken} setAccessToken={setAccessToken} reccomendations={reccomendations} setReccomendations={setReccomendations}/>
         ) : navigator === "Top Charts" ? (
-          <TopCharts accessToken={accessToken} setAccessToken={setAccessToken} topCharts={topCharts} setTopCharts={setTopCharts}/>
+          <TopCharts accessToken={accessToken} setAccessToken={setAccessToken} topCharts={topCharts} setTopCharts={setTopCharts} songName={songName} setSongName={setSongName} singerName={singerName} setSingerName={setSingerName} songImage={songImage} setSongImage={setSongImage} setAudioSrc={setAudioSrc} isPlaying={isPlaying} setIsPlaying={setIsPlaying} setSearchAudioErr={setSearchAudioErr} setDuration={setDuration}/>
         ) : (
           <Error />
         )
       ) : (
-          <SearchResults searchTerm={searchTerm} fetchAlbums={fetchAlbums} fetchTracks={fetchTracks} songName={songName} setSongName={setSongName} singerName={singerName} setSingerName={setSingerName} songImage={songImage} setSongImage={setSongImage} setAudioSrc={setAudioSrc} isPlaying={isPlaying} setIsPlaying={setIsPlaying} setSearchAudioErr={setSearchAudioErr}/>
+          <SearchResults searchTerm={searchTerm} fetchAlbums={fetchAlbums} fetchTracks={fetchTracks} songName={songName} setSongName={setSongName} singerName={singerName} setSingerName={setSingerName} songImage={songImage} setSongImage={setSongImage} setAudioSrc={setAudioSrc} isPlaying={isPlaying} setIsPlaying={setIsPlaying} setSearchAudioErr={setSearchAudioErr} selected={selected} setDuration={setDuration}/>
       )}
     </div>
   );

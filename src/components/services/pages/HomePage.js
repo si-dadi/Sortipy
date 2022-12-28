@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from "react";
-import SearchResults from "../../Player/SearchResults";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Typography,
+} from "@material-tailwind/react";
 
 function HomePage({
   selected,
   setSelected,
   genres,
   accessToken,
-  setAccessToken, fetchTracks, setTracks, setSongname, setSingerName, setSongImage
+  setAccessToken,
+  fetchTracks,
+  setTracks,
+  setSongName,
+  setSingerName,
+  setSongImage,
+  setAudioSrc,
+  isPlaying,
+  setIsPlaying,
+  setSearchAudioErr,
+  setDuration
 }) {
   const [genreTitle, setGenreTitle] = useState(genres[0].title);
 
@@ -48,7 +63,7 @@ function HomePage({
       // .then(data => console.log(data.artists))
       .then((data) => {
         // console.log(data);
-        setTracks(data.tracks.items)
+        setTracks(data.tracks.items);
         // console.log(fetchTracks)
       });
   }
@@ -61,7 +76,7 @@ function HomePage({
         </h2>
 
         <select
-        defaultValue={genres[0]}
+          defaultValue={genres[0]}
           value={selected}
           onChange={(e) => {
             setSelected(e.target.value);
@@ -78,7 +93,44 @@ function HomePage({
       </div>
       {/* [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] */}
       <div className="flex flex-wrap sm:justify-start justify-center gap-8">
-      <SearchResults fetchTracks={fetchTracks}/>
+        <div className="grid ld:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 overflow-auto h-1/2">
+          {fetchTracks.map((track, i) => {
+            // console.log(track)
+            return (
+              track.preview_url && (
+                <Card
+                  className="mx-3 overflow-auto my-3 bg-slate-700 hover:opacity-70 hover:scale-105 cursor-pointer text-white rounded-3xl"
+                  onClick={() => {
+                    setSongImage(track.album.images[0].url);
+                    setSongName(track.name);
+                    setSingerName(track.artists[0].name);
+                    track.preview_url
+                      ? setAudioSrc(track.preview_url)
+                      : setSearchAudioErr(true);
+                    setIsPlaying(!isPlaying);
+                    setDuration(track.duration_ms)
+                  }}
+                >
+                  <CardHeader color="blue" className="relative h-56">
+                    <img
+                      src={track.album.images[0].url}
+                      alt="error"
+                      className="h-full w-full my-2 flex rounded-xl"
+                    />
+                  </CardHeader>
+                  <CardBody className="text-center">
+                    <Typography className="mb-2 text-2xl font-bold my-2">
+                      {track.name}
+                    </Typography>
+                    <Typography className="text-xl my-2">
+                      {track.artists[0].name}
+                    </Typography>
+                  </CardBody>
+                </Card>
+              )
+            );
+          })}
+        </div>
       </div>
     </div>
   );

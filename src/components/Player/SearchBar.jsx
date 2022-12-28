@@ -75,11 +75,8 @@ const Searchbar = ({ searchTerm, setSearchTerm, accessToken, setAccessToken, fet
       <form
         autoComplete="off"
         className="p-2 text-gray-500 hover:text-gray-300 focus-within:text-gray-300"
-        onSubmit='#'
-      >
-        <label htmlFor="search-field" className="sr-only">
-          Search all files
-        </label>
+        onSubmit={e=> e.preventDefault()}
+        >
         <div className="flex flex-row justify-start items-center">
           <FiSearch aria-hidden="true" className="w-5 h-5 ml-4" />
           <input
@@ -94,7 +91,7 @@ const Searchbar = ({ searchTerm, setSearchTerm, accessToken, setAccessToken, fet
               setSearchTerm(e.target.value);
               fetchResults();
             }}
-            onSubmit='#'
+            onSubmit={e=> e.preventDefault()}
           />
         </div>
       </form>

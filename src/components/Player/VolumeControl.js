@@ -5,20 +5,21 @@ import {
   ImVolumeMedium,
   ImVolumeHigh,
 } from "react-icons/im";
-// impot './volumeontrol.css'
+// import styles from './volumeControl.css'
 
 
 function VolumeControl({ Volume, onChange, setVolume }) {
     const [prevVol, setprevVol] = useState(0)
 
   return (
-    <div className="relative my-auto mb-6 w-1/5 items-center justify-center flex flex-row right-0">
+    <div className="relative m-auto w-1/5 items-center justify-center flex flex-row">
       {Volume<=100 && Volume>70 && <ImVolumeHigh onClick={()=>    setVolume(0)} size={25} color="#FFF"/>}
       {Volume<=70 && Volume>40 && <ImVolumeMedium onClick={()=> setVolume(0)} size={25} color="#FFF"/>}
       {Volume<=40 && Volume>=10 && <ImVolumeLow onClick={()=> setVolume(0)} size={25} color="#FFF"/>}
       {Volume<10 && <ImVolumeMute2 onClick={()=> setVolume(40)} size={25} color="#FFF"/>}
       <input
-        className="volumeBar w-[100px] relative h-[5px] mx-4  outline-none rounded-[5px] mr-3 bg-primary appearance-none"
+        className="volumeBar w-[40%] relative  outline-none rounded-[5px] mr-3 bg-primary appearance-none -rotate-90"
+        // className={styles}
         type="range"
         min={0}
         max={100}
