@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import {BsPersonCircle} from 'react-icons/bs'
+import { BsPersonCircle } from "react-icons/bs";
 // import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Searchbar from "./Player/SearchBar";
 const navigation = [
@@ -19,9 +19,18 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example({searchTerm, setSearchTerm, accessToken, setAccessToken, fetchAlbums, setAlbums, fetchTracks, setTracks}) {
+export default function Example({
+  searchTerm,
+  setSearchTerm,
+  accessToken,
+  setAccessToken,
+  fetchAlbums,
+  setAlbums,
+  fetchTracks,
+  setTracks,
+}) {
   return (
-    <Disclosure as="nav" className="bg-gray-800 ">
+    <Disclosure as="nav" className="bg-gray-800 fixed inset-x-0 z-[150]">
       {({ open }) => (
         <>
           <div className="mx-auto ml-5 px-2 sm:px-6 lg:px-8 sticky top-0 z-[100]">
@@ -34,29 +43,38 @@ export default function Example({searchTerm, setSearchTerm, accessToken, setAcce
                 />
               </div>
 
-                <div className="relative items-center mx-auto">
-                  <Searchbar searchTerm={searchTerm} setSearchTerm={setSearchTerm} accessToken={accessToken} setAccessToken={setAccessToken} fetchAlbums={fetchAlbums} setAlbums={setAlbums} fetchTracks={fetchTracks} setTracks={setTracks}/>
-                </div>
+              <div className="relative items-center mx-auto">
+                <Searchbar
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                  accessToken={accessToken}
+                  setAccessToken={setAccessToken}
+                  fetchAlbums={fetchAlbums}
+                  setAlbums={setAlbums}
+                  fetchTracks={fetchTracks}
+                  setTracks={setTracks}
+                />
+              </div>
 
-                <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "px-3 py-2 rounded-md text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
-                  </div>
+              <div className="hidden sm:ml-6 sm:block">
+                <div className="flex space-x-4">
+                  {navigation.map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className={classNames(
+                        item.current
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "px-3 py-2 rounded-md text-sm font-medium"
+                      )}
+                      aria-current={item.current ? "page" : undefined}
+                    >
+                      {item.name}
+                    </a>
+                  ))}
                 </div>
+              </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 ">
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3 z-50">
@@ -65,8 +83,7 @@ export default function Example({searchTerm, setSearchTerm, accessToken, setAcce
                       <span className="sr-only">Open user menu</span>
                       <div className="right-0">
                         <img
-
-                        // TODO: needs fix
+                          // TODO: needs fix
                           className=" w-10 right-0 rounded-full"
                           src={localStorage.getItem("photoURL")}
                           // alt={<BsPersonCircle/>}

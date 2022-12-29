@@ -69,7 +69,7 @@ function HomePage({
   }
 
   return (
-    <div className="relative flex flex-col w-10/12 mx-auto mt-10 sm:mt-4 items-center justify-center">
+    <div className="relative flex flex-col w-10/12 mx-auto mt-10 sm:mt-4 items-center justify-center top-20 ">
       <div className="w-full flex justify-between items-center sm:flex-row flex-col mt-4 mb-10">
         <h2 className="font-bold text-3xl text-white uppercase my-4">
           Discover {selected}

@@ -18,7 +18,7 @@ function VolumeControl({ Volume, onChange, setVolume }) {
       {Volume<=40 && Volume>=10 && <ImVolumeLow onClick={()=> setVolume(0)} size={25} color="#FFF"/>}
       {Volume<10 && <ImVolumeMute2 onClick={()=> setVolume(40)} size={25} color="#FFF"/>}
       <input
-        className="volumeBar w-[40%] relative  outline-none rounded-[5px] mr-3 bg-primary appearance-none -rotate-90"
+        className="volumeBar w-[40%] relative outline-none rounded-[5px] mr-3 bg-primary appearance-none -rotate-90"
         // className={styles}
         type="range"
         min={0}

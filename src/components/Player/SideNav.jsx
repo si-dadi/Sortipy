@@ -16,7 +16,7 @@ export default function SideNav({ navigator, setNavigator, setSearchTerm }) {
   const [open, setOpen] = useState(false);
   return (
     <div
-      className={`absolute bg-[#0e0e0e] overflow-hidden   ${
+      className={`bg-[#0e0e0e] overflow-hidden top-[75px] fixed inset-y-0 h-fit z-[150]   ${
         open ? "w-72" : "w-16"
       } duration-500 text-gray-100 px-4 z-50`}
     >
