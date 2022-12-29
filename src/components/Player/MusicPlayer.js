@@ -72,7 +72,7 @@ const MusicPlayer = ({
   }, [Volume, isPlaying]);
 
   return (
-    <div className="fixed left-1/2 -translate-x-1/2 bottom-0 w-11/12 bg-slate-500 text-primary rounded-3xl text-white z-50 opacity-80 duration-1000 hover:opacity-100 items-center text-center mx-auto">
+    <div className="fixed left-1/2 -translate-x-1/2 bottom-0 lg:w-11/12 md:w-11/12 sm:w-full bg-slate-500 text-primary rounded-3xl text-white z-50 opacity-80 duration-1000 hover:opacity-100 items-center text-center mx-auto">
       <div className="flex flex-row items-center ">
         {/* Song Details */}
         <div className="left-0 w-1/3 flex flex-row items-center text-white">
@@ -151,7 +151,7 @@ const MusicPlayer = ({
                     : audioPlayer.current.pause();
                   songName !== ""
                     ? (document.title = `Sortify | Playing ${songName}`)
-                    : (document.title = "Sortify");
+                    : (document.title = "Sortify - Web Player");
                   setIsPlaying(!isPlaying);
                   whilePlaying();
                 }}

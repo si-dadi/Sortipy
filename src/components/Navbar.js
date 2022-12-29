@@ -36,11 +36,15 @@ export default function Example({
           <div className="mx-auto ml-5 px-2 sm:px-6 lg:px-8 sticky top-0 z-[100]">
             <div className="relative flex h-18 items-center ">
               <div className=" items-center ld:left-10 sm:left-6 md:left-8">
-                <img
-                  // src="https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg"
-                  src="https://www.svgrepo.com/show/431292/spotify.svg"
-                  className=" w-14 bg-green-500 rounded-full"
-                />
+                <a href="https://spotify.com" target='_blank'>
+                  <img
+                    // src="https://upload.wikimedia.org/wikipedia/commons/2/26/Spotify_logo_with_text.svg"
+                    // src="https://www.svgrepo.com/show/431292/spotify.svg"
+                    // src="https://www.citypng.com/public/uploads/preview/hd-gold-spotify-logo-icon-png-11661940170nhb2ad2cbf.png"
+                    src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_White.png"
+                    className=" w-20 cursor-pointer rounded-full"
+                  />
+                </a>
               </div>
 
               <div className="relative items-center mx-auto">

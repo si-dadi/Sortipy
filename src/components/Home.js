@@ -54,7 +54,7 @@ export default function Home() {
   const [searchAudioErr, setSearchAudioErr] = useState(false);
   const [duration, setDuration] = useState(0); // total song duration
 
-  console.log(isPlaying);
+  // console.log(isPlaying);
 
   return (
     <div className="fixed overflow-auto text-white z-0 w-screen min-h-screen h-screen min-w-full bg-gradient-to-tr from-slate-800 via-black/95 to-slate-800 ">
