@@ -21,7 +21,8 @@ function SearchResults({
   setIsPlaying,
   setSearchAudioErr,
   selected,
-  setDuration
+  setDuration,
+  setTrackId,
 }) {
   // console.log(fetchTracks);
   return (
@@ -46,6 +47,8 @@ function SearchResults({
                   : setSearchAudioErr(true)
                 setIsPlaying(!isPlaying)
                 setDuration(track.duration_ms)
+                // console.log(track.id)
+                setTrackId(track.id)
               }}
             >
               <CardHeader color="blue" className="relative h-56">

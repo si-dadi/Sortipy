@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiSearch } from "react-icons/fi";
 
-const Searchbar = ({ searchTerm, setSearchTerm, accessToken, setAccessToken, fetchAlbums, setAlbums, fetchTracks, setTracks}) => {
+const Searchbar = ({ searchTerm, setSearchTerm, accessToken, setAccessToken, fetchAlbums, setAlbums, fetchTracks, setTracks,}) => {
 
   useEffect(() => {
     //Spotify API Access Token

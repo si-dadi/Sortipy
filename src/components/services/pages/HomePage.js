@@ -91,7 +91,6 @@ function HomePage({
           ))}
         </select>
       </div>
-      {/* [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] */}
       <div className="flex flex-wrap sm:justify-start justify-center gap-8">
         <div className="grid ld:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 overflow-auto h-1/2">
           {fetchTracks.map((track, i) => {

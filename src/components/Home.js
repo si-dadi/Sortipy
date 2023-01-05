@@ -53,6 +53,7 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [searchAudioErr, setSearchAudioErr] = useState(false);
   const [duration, setDuration] = useState(0); // total song duration
+  const [trackId, setTrackId] = useState("")
 
   // console.log(isPlaying);
 
@@ -82,6 +83,7 @@ export default function Home() {
         setIsPlaying={setIsPlaying}
         searchAudioErr={searchAudioErr}
         duration={duration}
+        trackId={trackId}
       />
       {searchTerm === "" ? (
         navigator === "Home" ? (
@@ -103,7 +105,7 @@ export default function Home() {
             setDuration={setDuration}
           />
         ) : navigator === "Liked Songs" ? (
-          <LikedSongs />
+          <LikedSongs songImage={songImage} songName={songName} singerName={singerName}/>
         ) : navigator === "Your Playlists" ? (
           <Playlists />
         ) : navigator === "Recommendations" ? (
@@ -151,6 +153,7 @@ export default function Home() {
           setSearchAudioErr={setSearchAudioErr}
           selected={selected}
           setDuration={setDuration}
+        setTrackId={setTrackId}
         />
       )}
     </div>

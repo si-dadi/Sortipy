@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { auth, provider, fbProvider } from "./firebase";
+import { auth, provider, fbProvider, db } from "./firebase";
+import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+
 import {
   signInWithPopup,
   FacebookAuthProvider,
@@ -13,14 +15,22 @@ function Login() {
     await signInWithPopup(auth, provider).then((data) => {
       setValue(data.user.displayName);
       localStorage.setItem("displayName", data.user.displayName);
+      setValue(data.user.email);
+      localStorage.setItem("emailAdd", data.user.email);
       setValue(data.user.photoURL);
       localStorage.setItem("photoURL", data.user.photoURL);
+    });
+
+    // create user on firestore
+    await setDoc(doc(db, "users", `${localStorage.getItem("email")}`), {
+      uName: `${localStorage.getItem("email")}`,
+      LikedSongs: '123455',
+      Playlists: '1234',
     });
   };
 
   const FacebookLogin = async () => {
     await signInWithPopup(auth, fbProvider).then((data) => {
-      
       // display user pfp (broken rip)
       // const credential = FacebookAuthProvider.credentialFromResult(data);
       // const AccessToken = credential.accessToken;
@@ -29,9 +39,19 @@ function Login() {
 
       setValue(data.user.displayName);
       localStorage.setItem("displayName", data.user.displayName);
+      setValue(data.user.email);
+      localStorage.setItem("emailAdd", data.user.email);
       setValue(data.user.photoURL);
       localStorage.setItem("photoURL", data.user.photoURL);
     });
+
+    // create user on firestore
+    // const docRef = await addDoc(collection(db, "users"), {
+    //   uname: localStorage.getItem("emailAdd"),
+    // });
+    // const dbRef = doc(db, "users");
+    // setDoc(dbRef, { key: `${localStorage.getItem("email")}` });
+    
   };
 
   useEffect(() => {

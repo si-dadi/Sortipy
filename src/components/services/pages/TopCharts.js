@@ -64,7 +64,6 @@ function TopCharts({
       ? (document.title = `Sortify | Playing ${songName}`)
       : (document.title = "Sortify");
   }, []);
-  // console.log(topCharts)
   return (
     <>
       <div className="justify-center items-center overflow-auto flex flex-col m-auto w-10/12 ">

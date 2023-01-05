@@ -10,6 +10,9 @@ import {
 } from "react-icons/fa";
 import { BsFillPlayFill, BsPauseFill } from "react-icons/bs";
 import VolumeControl from "./VolumeControl";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+// import './MusicPlayer.css'
 
 const MusicPlayer = ({
   songName,
@@ -20,10 +23,12 @@ const MusicPlayer = ({
   setIsPlaying,
   searchAudioErr,
   duration,
+  trackId
 }) => {
   const [isFavourite, setIsFavourite] = useState(false);
   const [Duration, setDuration] = useState(0); // total song duration
   const [currentTime, setCurrentTime] = useState(0); // current time: TODO: change to time left in the future
+  const [seekTime, setSeekTime] = useState(0);
   const audioPlayer = useRef(); //audio ref
   const audioProgress = useRef(); //audio progress
   const animationRef = useRef();
@@ -70,6 +75,9 @@ const MusicPlayer = ({
       audioPlayer.current.volume = Volume / 100;
     }
   }, [Volume, isPlaying]);
+  useEffect(() => {
+    audioPlayer.current.currentTime = seekTime;
+  }, [seekTime]);
 
   return (
     <div className="fixed left-1/2 -translate-x-1/2 bottom-0 lg:w-11/12 md:w-11/12 sm:w-full bg-slate-500 text-primary rounded-3xl text-white z-50 opacity-80 duration-1000 hover:opacity-100 items-center text-center mx-auto">
@@ -132,7 +140,7 @@ const MusicPlayer = ({
               <motion.div
                 whileTap={{ scale: 0.8 }}
                 className="playPause mr-4 last:mr-0 bg-primaryTextWhite rounded-full p-2 cursor-pointer"
-                // needs fix
+                // play/pause on spacebar press, needs fix
                 // onKeyDown={(e) => {
                 //   if (e.key === "E") {
                 //     setIsPlaying(!isPlaying);
@@ -196,7 +204,11 @@ const MusicPlayer = ({
                   {isFavourite ? (
                     <FaHeart className="drop-shadow-[0px_0px_8px_#39ff14] scale-125 " />
                   ) : (
-                    <FaRegHeart />
+                    <FaRegHeart onClick={() => {
+                      // console.log(trackId)
+                      // const dbRef = doc(db, 'users', `${localStorage.getItem('email')}`)
+                      // setDoc(dbRef, {LikedSongs : trackId})
+                    }} />
                   )}
                 </i>
               </motion.div>
@@ -211,11 +223,18 @@ const MusicPlayer = ({
                 : "00 : 00"}
             </div>
             <input
-              className="tracklist_range w-[80%] sm:w-[50%] relative h-[5px] mx-4  outline-none rounded-[5px] mr-3 bg-primary appearance-none"
+              className="w-[80%] sm:w-[50%] relative h-[3px] mx-4  outline-none mr-3 appearance-none bg-white/80 shadow-xx rounded slider-thumb bg-gradient-to-r from-green-500 to-yellow-400 cursor-pointer"
               type="range"
               ref={audioProgress}
-              onChange={changeProgress}
+              defaultValue={0}
+              onChange={changeProgress} 
+              min='0'
+              max='30'
+              step={0.05}  
+              onInput={(event) => setSeekTime(event.target.value)}
+              value={currentTime}
             />
+            
             <div className="duration text-primaryTextWhite text-[14px] font-semibold">
               {duration && !isNaN(duration)
                 ? `00 : 30 (${calcTime(duration)})`
