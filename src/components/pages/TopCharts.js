@@ -85,7 +85,7 @@ function TopCharts({
                   track.track.preview_url
                     ? setAudioSrc(track.track.preview_url)
                     : setSearchAudioErr(true);
-                  setIsPlaying(!isPlaying);
+                  setIsPlaying(false);
                   setDuration(track.track.duration_ms);
                   checkLikedSong(track.id)
                 }}

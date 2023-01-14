@@ -111,7 +111,7 @@ function HomePage({
                     track.preview_url
                       ? setAudioSrc(track.preview_url)
                       : setSearchAudioErr(true);
-                    setIsPlaying(!isPlaying);
+                    setIsPlaying(false);  
                     setDuration(track.duration_ms);
                     checkLikedSong(track.id)
                   }}

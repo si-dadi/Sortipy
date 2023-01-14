@@ -34,12 +34,15 @@ function Recommendations({
       .then(
         fetch("https://api.spotify.com/v1/recommendations", artistParams)
           .then((res) => res.json())
-          .then((data) => console.log(data))
+          // .then((data) => console.log(data))
       );
   }, []);
   return (
-    <div className="text-white justify-center items-center flex text-2xl">
-      Recommendations
+    <div className="text-white justify-center items-center flex flex-col text-3xl md:mt-[8%] sm:mt-[15%]">
+      <h1>
+        Recommendations
+        </h1>
+        <h3 className="mt-4">Work in Progress...</h3>
     </div>
   );
 }

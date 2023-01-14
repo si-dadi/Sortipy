@@ -142,10 +142,6 @@ export default function Home() {
             setAccessToken={setAccessToken}
             likedSongsArray={likedSongsArray}
             setLikedSongsArray={setLikedSongsArray}
-            checkLikedSong={checkLikedSong}
-            isLikedSong={isLikedSong}
-            setIsLikedSong={setIsLikedSong}
-            trackId={trackId}
             setSongImage={setSongImage}
             setSongname={setSongName}
             setSingerName={setSingerName}
