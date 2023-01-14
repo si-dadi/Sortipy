@@ -1,39 +1,29 @@
-import Navbar from "./Navbar";
-import SideNav from "./Player/SideNav";
-import { MusicPlayer } from "./Player/MusicPlayer";
-import React, { useState, useEffect } from "react";
+import Navbar from "../components/UI/NavBar/Navbar";
+import SideNav from "./UI/SideNav/SideNav";
+import { MusicPlayer } from "./UI/Music Player/MusicPlayer";
+import React, { useState } from "react";
 import Error from "./services/Error";
-import HomePage from "./services/pages/HomePage";
-import LikedSongs from "./services/pages/LikedSongs";
-import Playlists from "./services/pages/Playlists";
-import TopCharts from "./services/pages/TopCharts";
-import Recommendations from "./services/pages/Recommendations";
-import SearchResults from "./Player/SearchResults";
+import HomePage from "./pages/HomePage";
+import LikedSongs from "./pages/LikedSongs";
+import Playlists from "./pages/Playlists";
+import TopCharts from "./pages/TopCharts";
+import Recommendations from "./pages/Recommendations";
+import SearchResults from "./UI/NavBar/SearchResults";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "./services/firebase";
 
 const genres = [
-  { title: "Pop", value: "pop" },
   { title: "Hip-Hop", value: "hip hop" },
-  { title: "Dance", value: "dance" },
-  { title: "Electronic", value: "electronic" },
-  { title: "Soul", value: "soul" },
-  { title: "Alternative", value: "alternative" },
-  { title: "Rock", value: "rock" },
-  // { title: "Latin", value: "latin" },
-  // { title: "Film", value: "FILM_TV" },
-  { title: "Country", value: "country" },
-  { title: "Worldwide", value: "worldwide" },
-  // { title: "Reggae", value: "REGGAE_DANCE_HALL" },
-  // { title: "House", value: "HOUSE" },
   { title: "K-Pop", value: "k pop" },
+  { title: "Country", value: "country" },
+  { title: "Dance", value: "dance" },
+  { title: "Alternative", value: "alternative" },
+  { title: "Electronic", value: "electronic" },
+  { title: "Rock", value: "rock" },
+  { title: "Pop", value: "pop" },
+  { title: "Soul", value: "soul" },
+  { title: "Worldwide", value: "worldwide" },
 ];
-
-const options = {
-  method: "GET",
-  headers: {
-    "X-RapidAPI-Key": "262792b9afmsh3bea3d41ee6769cp1edc58jsn436bfad00fef",
-    "X-RapidAPI-Host": "shazam-core.p.rapidapi.com",
-  },
-};
 
 export default function Home() {
   const [navigator, setNavigator] = useState("Home");
@@ -41,7 +31,7 @@ export default function Home() {
   const [accessToken, setAccessToken] = useState("");
   const [fetchAlbums, setAlbums] = useState([]);
   const [fetchTracks, setTracks] = useState([]);
-  const [selected, setSelected] = useState(genres[0].value || "pop");
+  const [selected, setSelected] = useState(genres[0].value || "hip hop");
   const [topCharts, setTopCharts] = useState([]);
   const [reccomendations, setReccomendations] = useState([]);
 
@@ -53,9 +43,45 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [searchAudioErr, setSearchAudioErr] = useState(false);
   const [duration, setDuration] = useState(0); // total song duration
-  const [trackId, setTrackId] = useState("")
+  const [trackId, setTrackId] = useState("");
+  const [isLikedSong, setIsLikedSong] = useState(false);
+  const [likedSongsData, setLikedSongsData] = useState([]);
+  const [likedSongsArray, setLikedSongsArray] = useState([]);
 
   // console.log(isPlaying);
+  // window.addEventListener(
+  //   'keydown', function (k) {
+  //     if(k.which===32)
+  //     setIsPlaying(!isPlaying)
+  //   }
+  // );
+
+  // firestore
+  const dbRef = doc(db, "users", localStorage.getItem("email"));
+
+  async function checkLikedSong(TrackId) {
+    await getDoc(dbRef, "users", localStorage.getItem("email")).then(
+      (docSnap) => {
+        if (docSnap.exists()) {
+          setLikedSongsData(docSnap.data());
+          setLikedSongsArray(likedSongsData.LikedSongs)
+          // console.log("LSA", likedSongsArray);
+          if (
+            likedSongsArray.includes(
+              `https://api.spotify.com/v1/tracks/${TrackId}` 
+            )
+          ) {
+            setIsLikedSong(true);
+          } else setIsLikedSong(false);
+
+          return isLikedSong;
+        } else {
+          return <Error />;
+        }
+      }
+    );
+    console.log("L", isLikedSong);
+  }
 
   return (
     <div className="fixed overflow-auto text-white z-0 w-screen min-h-screen h-screen min-w-full bg-gradient-to-tr from-slate-800 via-black/95 to-slate-800 ">
@@ -84,6 +110,11 @@ export default function Home() {
         searchAudioErr={searchAudioErr}
         duration={duration}
         trackId={trackId}
+        accessToken={accessToken}
+        setAccessToken={setAccessToken}
+        checkLikedSong={checkLikedSong}
+        isLikedSong={isLikedSong}
+        setIsLikedSong={setIsLikedSong}
       />
       {searchTerm === "" ? (
         navigator === "Home" ? (
@@ -103,9 +134,27 @@ export default function Home() {
             setIsPlaying={setIsPlaying}
             setSearchAudioErr={setSearchAudioErr}
             setDuration={setDuration}
+            checkLikedSong={checkLikedSong}
           />
         ) : navigator === "Liked Songs" ? (
-          <LikedSongs songImage={songImage} songName={songName} singerName={singerName}/>
+          <LikedSongs
+            accessToken={accessToken}
+            setAccessToken={setAccessToken}
+            likedSongsArray={likedSongsArray}
+            setLikedSongsArray={setLikedSongsArray}
+            checkLikedSong={checkLikedSong}
+            isLikedSong={isLikedSong}
+            setIsLikedSong={setIsLikedSong}
+            trackId={trackId}
+            setSongImage={setSongImage}
+            setSongname={setSongName}
+            setSingerName={setSingerName}
+            setAudioSrc={setAudioSrc}
+            setSearchAudioErr={setSearchAudioErr}
+            setIsPlaying={setIsPlaying}
+            isPlaying={isPlaying}
+            setDuration={setDuration}
+          />
         ) : navigator === "Your Playlists" ? (
           <Playlists />
         ) : navigator === "Recommendations" ? (
@@ -132,6 +181,8 @@ export default function Home() {
             setIsPlaying={setIsPlaying}
             setSearchAudioErr={setSearchAudioErr}
             setDuration={setDuration}
+            checkLikedSong={checkLikedSong}
+
           />
         ) : (
           <Error />
@@ -153,7 +204,8 @@ export default function Home() {
           setSearchAudioErr={setSearchAudioErr}
           selected={selected}
           setDuration={setDuration}
-        setTrackId={setTrackId}
+          setTrackId={setTrackId}
+          checkLikedSong={checkLikedSong}
         />
       )}
     </div>

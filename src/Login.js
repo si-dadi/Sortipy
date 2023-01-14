@@ -1,32 +1,50 @@
 import React, { useEffect, useState } from "react";
-import { auth, provider, fbProvider, db } from "./firebase";
-import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import { auth, provider, fbProvider, db } from "./components/services/firebase";
+import { doc, setDoc, arrayUnion } from "firebase/firestore";
 
 import {
   signInWithPopup,
   FacebookAuthProvider,
   updateProfile,
+  OAuthProvider,
+  linkWithPopup,
 } from "firebase/auth";
 import Home from "./components/Home";
-import "./login.css";
+
 function Login() {
   const [value, setValue] = useState("");
+  // Merging multiple Auth Providers
+  // const repo = new MyUserDataRepo();
+  // const prevUser = auth.currentUser;
+  // const prevUserData = repo.get(prevUser);
+  // repo.delete(prevUser);
+
   const GoogleLogin = async () => {
     await signInWithPopup(auth, provider).then((data) => {
       setValue(data.user.displayName);
       localStorage.setItem("displayName", data.user.displayName);
       setValue(data.user.email);
-      localStorage.setItem("emailAdd", data.user.email);
+      localStorage.setItem("email", data.user.email);
       setValue(data.user.photoURL);
       localStorage.setItem("photoURL", data.user.photoURL);
+
+      // create firebase doc
+      const userDoc = doc(db, "users", `${data.user.email}`);
+      setDoc(userDoc, {LikedSongs: arrayUnion()}, {merge: true});
     });
 
-    // create user on firestore
-    await setDoc(doc(db, "users", `${localStorage.getItem("email")}`), {
-      uName: `${localStorage.getItem("email")}`,
-      LikedSongs: '123455',
-      Playlists: '1234',
-    });
+    // .then(async (result) => {
+    //   const currentUser = result.user;
+    //   const currentUserData = repo.get(currentUser);
+    //   const mergedData = repo.merge(prevUserData, currentUserData);
+    //   const credential = OAuthProvider.credentialFromResult(result);
+    //   const linkResult = await linkWithPopup(prevUser, credential);
+    //   // Sign in with the newly linked credential
+    //   const linkCredential = OAuthProvider.credentialFromResult(linkResult);
+    //   const signInResult = await signInWithPopup(auth, linkCredential);
+    //   // Save the merged data to the new user
+    //   repo.set(signInResult.user, mergedData);
+    // });
   };
 
   const FacebookLogin = async () => {
@@ -40,10 +58,22 @@ function Login() {
       setValue(data.user.displayName);
       localStorage.setItem("displayName", data.user.displayName);
       setValue(data.user.email);
-      localStorage.setItem("emailAdd", data.user.email);
+      localStorage.setItem("email", data.user.email);
       setValue(data.user.photoURL);
       localStorage.setItem("photoURL", data.user.photoURL);
     });
+    // .then(async (result) => {
+    //   const currentUser = result.user;
+    //   const currentUserData = repo.get(currentUser);
+    //   const mergedData = repo.merge(prevUserData, currentUserData);
+    //   const credential = OAuthProvider.credentialFromResult(result);
+    //   const linkResult = await linkWithPopup(prevUser, credential);
+    //   // Sign in with the newly linked credential
+    //   const linkCredential = OAuthProvider.credentialFromResult(linkResult);
+    //   const signInResult = await signInWithPopup(auth, linkCredential);
+    //   // Save the merged data to the new user
+    //   repo.set(signInResult.user, mergedData);
+    // });
 
     // create user on firestore
     // const docRef = await addDoc(collection(db, "users"), {
@@ -51,7 +81,6 @@ function Login() {
     // });
     // const dbRef = doc(db, "users");
     // setDoc(dbRef, { key: `${localStorage.getItem("email")}` });
-    
   };
 
   useEffect(() => {
@@ -61,7 +90,7 @@ function Login() {
   return (
     <div>
       {value ? (
-        <Home />
+        <Home/>
       ) : (
         <>
           <div className=" relative bg-slate-900 flex flex-col w-full justify-center items-center min-h-screen overflow-hidden ">
